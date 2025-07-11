@@ -1,0 +1,107 @@
+//bibliotecas
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+//definicao pinos/variaveis
+double ldrPin = A0;
+int ledPin = 9;
+int ledPin2 = 6;
+int ledPin3 = 7;
+int ledPin4 = 10;
+int ledPin5 = 1;
+int buzzerPin = 8;
+double ldrValue = 0.0;
+
+//setup
+void setup() {
+ pinMode(ledPin, OUTPUT);
+ pinMode(ledPin2, OUTPUT);
+ pinMode(ledPin3, OUTPUT);
+ pinMode(ledPin4, OUTPUT);
+ pinMode(ledPin5, OUTPUT);
+ pinMode(buzzerPin, OUTPUT);
+ lcd.begin(16, 2);
+ lcd.print("Sim. de Turbidez");
+ lcd.setCursor(0,1);
+ lcd.print("Luz disponivel");
+ delay(2500);
+ lcd.clear();
+}
+
+//loop principal
+void loop() {
+ ldrValue = analogRead(ldrPin);
+ //controle de LEDs
+  if(ldrValue < 250){
+    digitalWrite(ledPin, HIGH);
+    delay(250);
+    digitalWrite(ledPin, LOW);
+    delay(1);
+  }
+  else{
+    digitalWrite(ledPin, LOW);
+  }
+  if((ldrValue >= 250) && (ldrValue < 350)){
+    digitalWrite(ledPin2, HIGH);
+    delay(1000);
+    digitalWrite(ledPin2, LOW);
+    delay(10);
+  }
+  else{
+    digitalWrite(ledPin2, LOW);
+  }
+  if((ldrValue >= 350) && (ldrValue < 500)){
+    digitalWrite(ledPin3, HIGH);
+  }
+  else{
+    digitalWrite(ledPin3, LOW);
+  }
+  if((ldrValue >= 500) && (ldrValue < 600)){
+    digitalWrite(ledPin4, HIGH);
+  }
+  else{
+    digitalWrite(ledPin4, LOW);
+  }
+  if(ldrValue >= 600){
+    digitalWrite(ledPin5, HIGH);
+  }
+  else{
+    digitalWrite(ledPin5, LOW);
+  }
+ 
+ lcd.setCursor(0, 0);
+  if(ldrValue < 200){
+    lcd.clear();
+ 	lcd.print("Risco ambiental");
+  }
+  if((ldrValue >= 400) && (ldrValue < 600)){
+    lcd.clear();
+ 	lcd.print("Deve-se intervir");
+  }
+  if(ldrValue >= 600){
+    lcd.clear();
+ 	lcd.print("Boa iluminacao");
+  }
+ lcd.setCursor(0, 1);
+ lcd.print("%de Luz:");
+ lcd.print(((ldrValue - 6)/673)*100);
+ lcd.print('%');
+  
+ //buzzer
+  if (ldrValue < 250) {
+ digitalWrite(buzzerPin, HIGH);
+ delay(250);
+ digitalWrite(buzzerPin, LOW);
+ delay(1);
+ } 
+  if ((ldrValue >= 250) && (ldrValue < 350)) {
+ digitalWrite(buzzerPin, HIGH);
+ delay(1000);
+ digitalWrite(buzzerPin, LOW);
+ delay(1);
+ } 
+ else {
+ digitalWrite(buzzerPin, LOW);
+ }
+ delay(100);
+}
